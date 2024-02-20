@@ -1,0 +1,50 @@
+1.Find all the topics and tasks which are thought in the month of October
+
+SELECT *
+FROM topics
+WHERE MONTH(date) = 10;
+
+
+
+2.Find all the company drives which appeared between 15 oct-2020 and 31-oct-2020
+
+SELECT *
+FROM company_drives
+WHERE date BETWEEN '2020-10-15' AND '2020-10-31';
+
+
+
+
+3.Find all the company drives and students who are appeared for the placement.
+
+SELECT company_drives.company_name, users.name
+FROM company_drives
+JOIN attendance ON company_drives.date = attendance.date
+JOIN users ON attendance.user_id = users.user_id;
+
+
+
+4.Find the number of problems solved by the user in codekata
+
+SELECT user_id, SUM(problems_solved) AS total_problems_solved
+FROM codekata
+GROUP BY user_id;
+
+
+
+5.Find all the mentors with who has the mentee's count more than 15
+
+SELECT *
+FROM mentors
+WHERE mentee_count > 15;
+
+
+6.Find the number of users who are absent and task is not submitted  between 15 oct-2020 and 31-oct-2020
+
+SELECT COUNT(DISTINCT users.user_id) AS num_users
+FROM users
+JOIN attendance ON users.user_id = attendance.user_id
+LEFT JOIN tasks ON users.user_id = tasks.user_id AND tasks.status = 'pending'
+WHERE attendance.date BETWEEN '2020-10-15' AND '2020-10-31'
+AND attendance.status = 'absent'
+AND tasks.task_id IS NULL;
